@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+</head>
+<body>
+  <h2>Teachable Machine + WebSocket</h2>
+  <button onclick="init()">Start</button>
+  <script>
+    const URL = "https://teachablemachine.withgoogle.com/models/2fWGg7H1U/";
+
+    let model, webcam, maxPredictions;
+    let socket;
+
+    async function init() {
+      const modelURL = URL + "model.json";
+      const metadataURL = URL + "metadata.json";
+
+      model = await tmImage.load(modelURL, metadataURL);
+      maxPredictions = model.getTotalClasses();
+
+      webcam = new tmImage.Webcam(200, 200, true);
+      await webcam.setup();
+      await webcam.play();
+      window.requestAnimationFrame(loop);
+
+      document.body.appendChild(webcam.canvas);
+
+      socket = new WebSocket("ws://localhost:8080");
+      socket.onopen = () => console.log("WebSocket Connected");
+    }
+
+    async function loop() {
+      webcam.update();
+      await predict();
+      window.requestAnimationFrame(loop);
+    }
+
+    async function predict() {
+      const prediction = await model.predict(webcam.canvas);
+      if (prediction[0].className === "face" && prediction[0].probability > 0.9) {
+        socket.send('1');
+      } else {
+        socket.send('0');
+      }
+    }
+  </script>
+</body>
+</html>
