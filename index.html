@@ -4,7 +4,7 @@
     <title>Teachable Machine Image Model</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image/dist/teachablemachine-image.min.js"></script>
     <style>
       body { font-family: sans-serif; text-align: center; padding: 2em; }
       video { border-radius: 10px; }
@@ -17,6 +17,8 @@
     <div id="label-container"></div>
 
     <script type="text/javascript">
+      console.log("Is tmImage defined?", typeof tmImage); // Debug check
+
       const URL = "https://teachablemachine.withgoogle.com/models/2fWGg7H1U/";
 
       let model, webcam, labelContainer, maxPredictions;
@@ -26,6 +28,8 @@
         const metadataURL = URL + "metadata.json";
 
         model = await tmImage.load(modelURL, metadataURL);
+        console.log("Model loaded");
+
         maxPredictions = model.getTotalClasses();
 
         webcam = new tmImage.Webcam(200, 200, true);
@@ -57,5 +61,6 @@
     </script>
   </body>
 </html>
+
 
 
