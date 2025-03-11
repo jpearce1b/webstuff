@@ -5,11 +5,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- ✅ Include TensorFlow.js -->
+    <!-- ✅ Load TensorFlow.js FIRST -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
 
-    <!-- ✅ Include Teachable Machine Image Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image/dist/teachablemachine-image.min.js"></script>
+    <!-- ✅ Then load Teachable Machine Image library -->
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
     <style>
       body { font-family: sans-serif; text-align: center; padding: 2em; }
@@ -31,7 +31,10 @@
         const modelURL = URL + "model.json";
         const metadataURL = URL + "metadata.json";
 
+        console.log("Loading model...");
         model = await tmImage.load(modelURL, metadataURL);
+        console.log("Model loaded");
+
         maxPredictions = model.getTotalClasses();
 
         webcam = new tmImage.Webcam(200, 200, true);
@@ -63,6 +66,7 @@
     </script>
   </body>
 </html>
+
 
 
 
